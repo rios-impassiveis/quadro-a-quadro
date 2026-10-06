@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quadro a Quadro — tirinhas com legenda clássica</title>
+<meta name="description" content="Transforme suas fotos em cenas de filme com a clássica legenda amarela. Monte tirinhas e exporte no tamanho certo para Instagram, X e WhatsApp. Grátis e direto no navegador.">
+<meta name="theme-color" content="#0e0e10">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<!-- Prévia ao compartilhar o link -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Quadro a Quadro">
+<meta property="og:description" content="Suas fotos viram cena de filme, com a legenda amarela clássica.">
+<meta property="og:url" content="https://rios-impassiveis.github.io/quadro-a-quadro/">
+<meta property="og:image" content="https://rios-impassiveis.github.io/quadro-a-quadro/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --card: #18181b;
+    --card-2: #222226;
+    --borda: #2e2e33;
+    --texto: #ececef;
+    --texto-2: #9d9da6;
+    --destaque: #ffe500;
+    --destaque-txt: #141414;
+    --perigo: #ff5c5c;
+    --raio: 12px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--texto);
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+
+  /* ---------- Topo ---------- */
+  .topo {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 22px 20px 6px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--destaque);
+    color: var(--destaque-txt);
+    display: grid; place-items: center;
+    font-weight: 900; font-size: 22px;
+    box-shadow: 0 0 0 3px #000 inset;
+    font-family: Arial, sans-serif;
+  }
+  .topo h1 { margin: 0; font-size: 24px; letter-spacing: -0.5px; }
+  .topo h1 span { color: var(--destaque); -webkit-text-stroke: 1px #000; }
+  .topo p { margin: 0; color: var(--texto-2); }
+
+  /* ---------- Layout ---------- */
+  .layout {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 20px 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+  .coluna { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    padding: 16px;
+  }
+  .card h2 { font-size: 15px; margin: 0 0 12px; }
+  .card-titulo { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .card-titulo h2 { margin: 0; }
+  .contagem { color: var(--texto-2); font-weight: normal; margin-left: 6px; }
+
+  .linha { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .linha > input[type="text"] { flex: 1; min-width: 180px; }
+
+  input[type="text"], textarea, select {
+    background: var(--card-2);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    padding: 9px 11px;
+    outline: none;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--destaque); }
+
+  .btn {
+    border: 1px solid var(--borda);
+    background: var(--card-2);
+    border-radius: 8px;
+    padding: 9px 14px;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background .15s, border-color .15s, transform .05s;
+  }
+  .btn:hover { border-color: #55555c; background: #2a2a2f; }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.primario { background: var(--destaque); color: var(--destaque-txt); border-color: var(--destaque); }
+  .btn.primario:hover { background: #fff04d; }
+  .btn.pequeno { padding: 5px 9px; font-size: 13px; }
+  .btn.fantasma { background: transparent; }
+  .btn.perigo:hover { border-color: var(--perigo); color: var(--perigo); }
+
+  .check { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--texto-2); user-select: none; }
+  .check input { accent-color: var(--destaque); }
+
+  .dica { color: var(--texto-2); font-size: 12.5px; margin: 10px 0 0; }
+  .dica kbd {
+    background: var(--card-2); border: 1px solid var(--borda); border-bottom-width: 2px;
+    border-radius: 4px; padding: 0 5px; font-size: 11.5px; font-family: inherit;
+  }
+
+  /* ---------- Lista de quadros ---------- */
+  .lista { display: flex; flex-direction: column; gap: 10px; }
+  .quadro {
+    display: grid; grid-template-columns: 150px 1fr; gap: 12px;
+    background: var(--card-2); border: 1px solid var(--borda); border-radius: 10px; padding: 10px;
+  }
+  @media (max-width: 520px) { .quadro { grid-template-columns: 1fr; } }
+  .thumb { position: relative; border-radius: 6px; overflow: hidden; background: #000; align-self: start; }
+  .thumb img { display: block; width: 100%; height: auto; }
+  .thumb .num {
+    position: absolute; top: 5px; left: 5px; background: var(--destaque); color: var(--destaque-txt);
+    font-weight: 800; font-size: 12px; border-radius: 5px; padding: 1px 7px;
+  }
+  .thumb .ts {
+    position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,.75);
+    font-size: 11px; border-radius: 4px; padding: 1px 5px; font-variant-numeric: tabular-nums;
+  }
+  .quadro-corpo { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .quadro-corpo textarea { width: 100%; resize: vertical; min-height: 58px; }
+  .quadro-acoes { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
+
+  .add-imagens {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    border: 1.5px dashed #44444b; border-radius: 10px; padding: 16px; margin-top: 10px;
+    cursor: pointer; text-align: center; transition: border-color .15s, background .15s;
+  }
+  .add-imagens:hover, .add-imagens.arrastando { border-color: var(--destaque); background: rgba(255,229,0,.04); }
+  .add-imagens input { display: none; }
+  #zonaDrop { padding: 26px 16px; margin: 0 0 10px; }
+  .add-icone { font-size: 30px; line-height: 1; margin-bottom: 4px; }
+  #zonaDrop strong { font-size: 15px; }
+  .opcoes-upload { margin-bottom: 14px; }
+  .opcoes-upload .check { font-size: 13px; }
+  .add-imagens span { color: var(--texto-2); font-size: 12.5px; }
+  .lista-vazia { color: var(--texto-2); text-align: center; padding: 8px 0 2px; }
+
+  /* ---------- Preview ---------- */
+  .preview-area {
+    background: repeating-conic-gradient(#1d1d21 0% 25%, #141417 0% 50%) 50% / 20px 20px;
+    border-radius: 8px; padding: 10px; display: flex; justify-content: center;
+  }
+  #canvas {
+    display: block; max-width: 100%; max-height: 72vh; width: auto; height: auto;
+    border-radius: 4px; box-shadow: 0 4px 18px rgba(0,0,0,.6);
+  }
+  .exportar { display: flex; gap: 8px; margin-top: 12px; }
+  .exportar .btn { flex: 1; }
+  .dimensoes { color: var(--texto-2); font-size: 12px; text-align: center; margin-top: 8px; }
+  .seletores { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  @media (max-width: 520px) { .seletores { grid-template-columns: 1fr; } }
+  .dica-preview { color: var(--texto-2); font-size: 12px; text-align: center; margin: 4px 0 0; }
+  #canvas.editavel { cursor: grab; touch-action: none; }
+  #canvas.arrastando { cursor: grabbing; }
+  .zoom-quadro { display: flex; align-items: center; gap: 8px; color: var(--texto-2); font-size: 12.5px; }
+  .zoom-quadro input { flex: 1; accent-color: var(--destaque); }
+
+  /* ---------- Estilo ---------- */
+  .controles { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+  @media (max-width: 520px) { .controles { grid-template-columns: 1fr; } }
+  .controle label.rotulo { display: flex; justify-content: space-between; color: var(--texto-2); font-size: 12.5px; margin-bottom: 6px; }
+  .controle label.rotulo b { color: var(--texto); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .controle select { width: 100%; }
+  .controle input[type="range"] { width: 100%; accent-color: var(--destaque); }
+  .cores { display: flex; gap: 6px; align-items: center; }
+  .amostra {
+    width: 28px; height: 28px; border-radius: 50%; border: 2px solid #000; cursor: pointer;
+    box-shadow: 0 0 0 1px var(--borda);
+  }
+  .amostra.ativa { box-shadow: 0 0 0 2px var(--destaque); }
+  input[type="color"] {
+    width: 34px; height: 30px; padding: 0; border: 1px solid var(--borda); border-radius: 6px; background: none; cursor: pointer;
+  }
+  .separador { grid-column: 1 / -1; border-top: 1px solid var(--borda); margin: 2px 0; }
+  .subtitulo { grid-column: 1 / -1; font-weight: 600; margin: 0; }
+  .checks { grid-column: 1 / -1; display: flex; gap: 18px; flex-wrap: wrap; }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px);
+    background: #2b2b31; border: 1px solid #44444b; color: var(--texto);
+    padding: 10px 16px; border-radius: 10px; box-shadow: 0 6px 24px rgba(0,0,0,.5);
+    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+    max-width: min(560px, calc(100vw - 32px)); text-align: center; z-index: 10;
+  }
+  .toast.visivel { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="logo">Q</div>
+  <div>
+    <h1><span>Quadro a Quadro</span></h1>
+    <p>Junte suas imagens numa tirinha com aquela legenda amarela clássica.</p>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- ===================== COLUNA ESQUERDA ===================== -->
+  <section class="coluna">
+
+    <!-- Quadros -->
+    <div class="card">
+      <div class="card-titulo">
+        <h2>Quadros <span class="contagem" id="contagem"></span></h2>
+        <button class="btn pequeno fantasma perigo" id="btnLimpar" hidden>Limpar tudo</button>
+      </div>
+      <label class="add-imagens" id="zonaDrop">
+        <input type="file" id="addImagens" accept="image/*" multiple>
+        <span class="add-icone">🖼️</span>
+        <strong>Escolher imagens do dispositivo</strong>
+        <span>Dá para selecionar várias de uma vez · arrastar pra cá · ou colar com Ctrl+V</span>
+      </label>
+      <div class="opcoes-upload">
+        <label class="check"><input type="checkbox" id="cortarBarras" checked> Cortar barras pretas das imagens</label>
+      </div>
+      <div class="lista" id="lista"></div>
+    </div>
+  </section>
+
+  <!-- ===================== COLUNA DIREITA ===================== -->
+  <section class="coluna">
+    <div class="card">
+      <div class="seletores">
+        <div class="controle">
+          <label class="rotulo" for="proporcao">Proporção dos quadros</label>
+          <select id="proporcao">
+            <option value="1.7778">16:9 — TV / YouTube</option>
+            <option value="1.85">1.85:1 — Cinema</option>
+            <option value="2.39">2.39:1 — Cinemascope</option>
+            <option value="1.5">3:2 — Foto (ex.: 1600×1066)</option>
+            <option value="1.3333">4:3 — Filme antigo</option>
+            <option value="primeira">Igual à 1ª imagem</option>
+          </select>
+        </div>
+        <div class="controle">
+          <label class="rotulo" for="formato">Formato para</label>
+          <select id="formato">
+            <optgroup label="Instagram">
+              <option value="ig-feed">Feed retrato 4:5 · 1080×1350</option>
+              <option value="ig-quadrado">Feed quadrado 1:1 · 1080×1080</option>
+              <option value="stories">Stories / Reels 9:16 · 1080×1920</option>
+            </optgroup>
+            <optgroup label="X (Twitter)">
+              <option value="x-retrato">Retrato 4:5 · 1080×1350</option>
+              <option value="x-paisagem">Paisagem 16:9 · 1600×900</option>
+            </optgroup>
+            <optgroup label="WhatsApp">
+              <option value="zap">Conversa · 1080 de largura</option>
+              <option value="zap-status">Status 9:16 · 1080×1920</option>
+            </optgroup>
+            <optgroup label="Livre">
+              <option value="livre-720">Tirinha livre · 720 de largura</option>
+              <option value="livre-1280">Tirinha livre · 1280 de largura</option>
+              <option value="livre-1920">Tirinha livre · 1920 de largura</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+      <div class="preview-area"><canvas id="canvas"></canvas></div>
+      <div class="dimensoes" id="dimensoes"></div>
+      <p class="dica-preview" id="dicaPreview" hidden>Arraste uma foto na prévia para escolher o enquadramento · role a rodinha do mouse para dar zoom · clique duas vezes para recentralizar</p>
+      <div class="exportar">
+        <button class="btn primario" id="btnBaixar">⬇ Baixar PNG</button>
+        <button class="btn" id="btnCopiar">Copiar imagem</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="controles">
+        <p class="subtitulo">Legenda</p>
+
+        <div class="controle">
+          <label class="rotulo">Cor</label>
+          <div class="cores">
+            <button class="amostra" data-cor="#FFFF00" style="background:#FFFF00" title="Amarelo clássico"></button>
+            <button class="amostra" data-cor="#FFFFFF" style="background:#FFFFFF" title="Branco"></button>
+            <button class="amostra" data-cor="#00FFFF" style="background:#00FFFF" title="Ciano"></button>
+            <button class="amostra" data-cor="#7CFF4F" style="background:#7CFF4F" title="Verde"></button>
+            <input type="color" id="corLegenda" value="#FFFF00" title="Outra cor">
+          </div>
+        </div>
+
+        <div class="controle">
+          <label class="rotulo" for="fonteLegenda">Fonte</label>
+          <select id="fonteLegenda">
+            <option value="arial">Arial (clássica)</option>
+            <option value="impact">Impact (meme)</option>
+            <option value="verdana">Verdana</option>
+            <option value="trebuchet">Trebuchet</option>
+            <option value="georgia">Georgia</option>
+            <option value="comic">Comic Sans</option>
+          </select>
+        </div>
+
+        <div class="controle">
+          <label class="rotulo" for="tamanhoLegenda">Tamanho <b data-de="tamanhoLegenda"></b></label>
+          <input type="range" id="tamanhoLegenda" min="2" max="10" step="0.1" value="4.5">
+        </div>
+
+        <div class="controle">
+          <label class="rotulo" for="contornoLegenda">Contorno <b data-de="contornoLegenda"></b></label>
+          <input type="range" id="contornoLegenda" min="0" max="35" step="1" value="15">
+        </div>
+
+        <div class="controle">
+          <label class="rotulo" for="margemLegenda">Distância da borda <b data-de="margemLegenda"></b></label>
+          <input type="range" id="margemLegenda" min="1" max="30" step="0.5" value="6">
+        </div>
+
+        <div class="controle" style="display:flex; align-items:flex-end; gap:18px; flex-wrap:wrap;">
+          <label class="check"><input type="checkbox" id="maiusculas"> MAIÚSCULAS</label>
+          <label class="check"><input type="checkbox" id="sombra"> Sombra</label>
+        </div>
+
+        <div class="separador"></div>
+        <p class="subtitulo">Montagem</p>
+
+        <div class="controle">
+          <label class="rotulo" for="espaco">Espaço entre quadros e fundo <b data-de="espaco"></b></label>
+          <div class="cores">
+            <input type="range" id="espaco" min="0" max="60" step="1" value="0" style="flex:1">
+            <input type="color" id="corEspaco" value="#000000" title="Cor do espaço">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   Quadro a Quadro — utilitários
+   ========================================================= */
+const $ = (s) => document.querySelector(s);
+const dormir = (ms) => new Promise(r => setTimeout(r, ms));
+
+const toastEl = $('#toast');
+let toastTimer = null;
+function toast(msg, ms = 3200) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('visivel');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('visivel'), ms);
+}
+
+function fmtTempo(t) {
+  if (!isFinite(t) || t < 0) t = 0;
+  const h = Math.floor(t / 3600);
+  const m = Math.floor((t % 3600) / 60);
+  const s = (t % 60).toFixed(1).padStart(4, '0');
+  return h ? `${h}:${String(m).padStart(2, '0')}:${s}` : `${m}:${s}`;
+}
+
+function digitando(el) {
+  return el && (el.tagName === 'INPUT' && el.type === 'text' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable);
+}
+
+/* =========================================================
+   Estado
+   ========================================================= */
+const quadros = []; // { id, fonte: canvas, thumb: dataURL, txt, ts }
+let proximoId = 1;
+
+const ESTILO_PADRAO = {
+  cor: '#FFFF00', fonte: 'arial', tamanho: 4.5, contorno: 15, margem: 6,
+  maiusculas: false, sombra: false, proporcao: '1.7778', formato: 'ig-feed', espaco: 0, corEspaco: '#000000'
+};
+let estilo = { ...ESTILO_PADRAO };
+try { Object.assign(estilo, JSON.parse(localStorage.getItem('quadroaquadro.estilo') || '{}')); } catch (e) {}
+
+const FONTES = {
+  arial: "Arial, Helvetica, sans-serif",
+  impact: "Impact, 'Arial Black', sans-serif",
+  verdana: "Verdana, Geneva, sans-serif",
+  trebuchet: "'Trebuchet MS', sans-serif",
+  georgia: "Georgia, 'Times New Roman', serif",
+  comic: "'Comic Sans MS', 'Comic Neue', cursive"
+};
+
+/* =========================================================
+   Renderização da montagem
+   ========================================================= */
+const canvas = $('#canvas');
+const ctx = canvas.getContext('2d');
+let renderAgendado = false;
+
+function agendarRender() {
+  if (renderAgendado) return;
+  renderAgendado = true;
+  requestAnimationFrame(render);
+}
+
+const FORMATOS = {
+  'ig-feed':     { w: 1080, h: 1350, nome: 'Instagram feed' },
+  'ig-quadrado': { w: 1080, h: 1080, nome: 'Instagram quadrado' },
+  'stories':     { w: 1080, h: 1920, nome: 'Stories/Reels' },
+  'x-retrato':   { w: 1080, h: 1350, nome: 'X retrato' },
+  'x-paisagem':  { w: 1600, h: 900,  nome: 'X paisagem' },
+  'zap':         { w: 1080, h: 0,    nome: 'WhatsApp' },
+  'zap-status':  { w: 1080, h: 1920, nome: 'WhatsApp Status' },
+  'livre-720':   { w: 720,  h: 0,    nome: 'Livre' },
+  'livre-1280':  { w: 1280, h: 0,    nome: 'Livre' },
+  'livre-1920':  { w: 1920, h: 0,    nome: 'Livre' }
+};
+
+// Proporção (largura ÷ altura) usada em todos os quadros
+function proporcaoAtual() {
+  if (estilo.proporcao === 'primeira' && quadros.length) {
+    const f = quadros[0].fonte;
+    return f.width / f.height;
+  }
+  return parseFloat(estilo.proporcao) || 16 / 9;
+}
+
+let layoutAtual = []; // posição de cada quadro no canvas (para arrastar o enquadramento)
+
+// Recorte "cover": pega a maior área da foto na proporção R, com zoom e posição do quadro
+function calcularCorte(q, R) {
+  const iw = q.fonte.width, ih = q.fonte.height;
+  let sw, sh;
+  if (iw / ih > R) { sh = ih; sw = ih * R; } else { sw = iw; sh = iw / R; }
+  sw /= q.zoom; sh /= q.zoom;
+  return { sx: (iw - sw) * q.px, sy: (ih - sh) * q.py, sw, sh, iw, ih };
+}
+
+function render() {
+  renderAgendado = false;
+
+  if (!quadros.length) {
+    canvas.width = 1280; canvas.height = 720;
+    ctx.fillStyle = '#1b1b1f';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#6c6c74';
+    ctx.font = "600 34px 'Segoe UI', sans-serif";
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('Adicione imagens para começar', 640, 345);
+    ctx.font = "26px 'Segoe UI', sans-serif";
+    ctx.fillText('a prévia da tirinha aparece aqui', 640, 395);
+    $('#dimensoes').textContent = '';
+    $('#dicaPreview').hidden = true;
+    canvas.classList.remove('editavel');
+    layoutAtual = [];
+    return;
+  }
+
+  const fmt = FORMATOS[estilo.formato] || FORMATOS['ig-feed'];
+  const R = proporcaoAtual();
+  const n = quadros.length;
+
+  let W, H, fw, fh, gap, x0, y0;
+  if (fmt.h) {
+    // tamanho fixo (rede social): a tirinha é encaixada e centralizada no fundo
+    W = fmt.w; H = fmt.h;
+    const g = estilo.espaco / 1000;              // espaço proporcional à largura do quadro
+    // largura de quadro que cabe na largura e na altura disponíveis (margem externa = espaço)
+    const porLargura = W / (1 + 2 * g);
+    const porAltura = H / (n / R + (n + 1) * g);
+    fw = Math.floor(Math.min(porLargura, porAltura));
+    fh = Math.round(fw / R);
+    gap = Math.round(fw * g);
+    const alturaTirinha = n * fh + (n - 1) * gap;
+    x0 = Math.round((W - fw) / 2);
+    y0 = Math.round((H - alturaTirinha) / 2);
+  } else {
+    // tirinha livre: largura fixa, altura cresce com o número de quadros
+    W = fmt.w;
+    fw = W; fh = Math.round(fw / R);
+    gap = Math.round(fw * estilo.espaco / 1000);
+    H = n * fh + (n - 1) * gap;
+    x0 = 0; y0 = 0;
+  }
+
+  canvas.width = W;
+  canvas.height = Math.max(1, H);
+  ctx.fillStyle = estilo.corEspaco;
+  ctx.fillRect(0, 0, W, H);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  layoutAtual = [];
+  quadros.forEach((q, i) => {
+    const y = y0 + i * (fh + gap);
+    const corte = calcularCorte(q, R);
+    ctx.drawImage(q.fonte, corte.sx, corte.sy, corte.sw, corte.sh, x0, y, fw, fh);
+    layoutAtual.push({ q, x: x0, y, w: fw, h: fh });
+    ctx.save();
+    ctx.beginPath(); ctx.rect(x0, y, fw, fh); ctx.clip();
+    desenharLegenda(q.txt, x0, y, fw, fh);
+    ctx.restore();
+  });
+
+  $('#dimensoes').textContent = `${fmt.nome} · ${W} × ${H} px · ${n} quadro${n > 1 ? 's' : ''}`;
+  $('#dicaPreview').hidden = false;
+  canvas.classList.add('editavel');
+}
+
+function quebrarLinhas(texto, larguraMax) {
+  const linhas = [];
+  for (const paragrafo of texto.split('\n')) {
+    const palavras = paragrafo.split(/\s+/).filter(Boolean);
+    if (!palavras.length) { linhas.push(''); continue; }
+    let atual = palavras[0];
+    for (let i = 1; i < palavras.length; i++) {
+      const teste = atual + ' ' + palavras[i];
+      if (ctx.measureText(teste).width <= larguraMax) atual = teste;
+      else { linhas.push(atual); atual = palavras[i]; }
+    }
+    linhas.push(atual);
+  }
+  // remove linhas vazias nas pontas
+  while (linhas.length && !linhas[0]) linhas.shift();
+  while (linhas.length && !linhas[linhas.length - 1]) linhas.pop();
+  return linhas;
+}
+
+function desenharLegenda(txt, x0, y0, W, h) {
+  let texto = (txt || '').trim();
+  if (!texto) return;
+  if (estilo.maiusculas) texto = texto.toLocaleUpperCase('pt-BR');
+
+  const fs = Math.max(10, Math.round(W * estilo.tamanho / 100));
+  ctx.font = `bold ${fs}px ${FONTES[estilo.fonte] || FONTES.arial}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.lineJoin = 'round';
+  ctx.miterLimit = 2;
+
+  const linhas = quebrarLinhas(texto, W * 0.92);
+  const alturaLinha = fs * 1.18;
+  const base = y0 + h - h * estilo.margem / 100;
+  const x = x0 + W / 2;
+  const contorno = fs * estilo.contorno / 100;
+
+  linhas.forEach((linha, i) => {
+    const ly = base - (linhas.length - 1 - i) * alturaLinha;
+
+    if (estilo.sombra) {
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,0.75)';
+      ctx.shadowBlur = fs * 0.18;
+      ctx.shadowOffsetY = fs * 0.06;
+      ctx.fillStyle = '#000';
+      ctx.fillText(linha, x, ly);
+      ctx.restore();
+    }
+    if (contorno > 0) {
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = contorno;
+      ctx.strokeText(linha, x, ly);
+    }
+    ctx.fillStyle = estilo.cor;
+    ctx.fillText(linha, x, ly);
+  });
+}
+
+/* =========================================================
+   Lista de quadros
+   ========================================================= */
+const listaEl = $('#lista');
+
+function miniatura(c) {
+  const t = document.createElement('canvas');
+  t.width = 300;
+  t.height = Math.max(1, Math.round(300 * c.height / c.width));
+  t.getContext('2d').drawImage(c, 0, 0, t.width, t.height);
+  return t.toDataURL('image/jpeg', 0.82);
+}
+
+function adicionarQuadro(fonte, ts = '') {
+  quadros.push({ id: proximoId++, fonte, thumb: miniatura(fonte), txt: '', ts, px: 0.5, py: 0.5, zoom: 1 });
+  renderLista();
+  agendarRender();
+  // foca a legenda do quadro novo
+  const areas = listaEl.querySelectorAll('textarea');
+  const ultima = areas[areas.length - 1];
+  if (ultima && !digitando(document.activeElement)) ultima.focus({ preventScroll: true });
+}
+
+function moverQuadro(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= quadros.length) return;
+  [quadros[i], quadros[j]] = [quadros[j], quadros[i]];
+  renderLista(); agendarRender();
+}
+
+function removerQuadro(i) {
+  quadros.splice(i, 1);
+  renderLista(); agendarRender();
+}
+
+function renderLista() {
+  listaEl.innerHTML = '';
+  $('#contagem').textContent = quadros.length ? `(${quadros.length})` : '';
+  $('#btnLimpar').hidden = quadros.length === 0;
+
+  if (!quadros.length) {
+    const vazio = document.createElement('div');
+    vazio.className = 'lista-vazia';
+    vazio.textContent = 'Nenhum quadro ainda. Escolha as imagens acima.';
+    listaEl.appendChild(vazio);
+    return;
+  }
+
+  quadros.forEach((q, i) => {
+    const item = document.createElement('div');
+    item.className = 'quadro';
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    const img = document.createElement('img');
+    img.src = q.thumb; img.alt = `Quadro ${i + 1}`;
+    const num = document.createElement('span');
+    num.className = 'num'; num.textContent = i + 1;
+    thumb.append(img, num);
+    if (q.ts) {
+      const ts = document.createElement('span');
+      ts.className = 'ts'; ts.textContent = q.ts;
+      thumb.appendChild(ts);
+    }
+
+    const corpo = document.createElement('div');
+    corpo.className = 'quadro-corpo';
+    const area = document.createElement('textarea');
+    area.rows = 2;
+    area.placeholder = `Legenda do quadro ${i + 1}… (Enter quebra a linha)`;
+    area.value = q.txt;
+    area.addEventListener('input', () => { q.txt = area.value; agendarRender(); });
+
+    const acoes = document.createElement('div');
+    acoes.className = 'quadro-acoes';
+    const botao = (rotulo, titulo, fn, desativado = false, extra = '') => {
+      const b = document.createElement('button');
+      b.className = 'btn pequeno ' + extra;
+      b.textContent = rotulo; b.title = titulo; b.disabled = desativado;
+      b.addEventListener('click', fn);
+      return b;
+    };
+    acoes.append(
+      botao('↑', 'Subir', () => moverQuadro(i, -1), i === 0),
+      botao('↓', 'Descer', () => moverQuadro(i, 1), i === quadros.length - 1),
+      botao('Trocar', 'Trocar a imagem deste quadro', () => trocarImagem(q)),
+      botao('Remover', 'Remover quadro', () => removerQuadro(i), false, 'perigo')
+    );
+
+    const zoom = document.createElement('label');
+    zoom.className = 'zoom-quadro';
+    zoom.append('Zoom');
+    const zr = document.createElement('input');
+    zr.type = 'range'; zr.min = '1'; zr.max = '3'; zr.step = '0.01'; zr.value = q.zoom;
+    zr.dataset.zoomId = q.id;
+    zr.addEventListener('input', () => { q.zoom = +zr.value; agendarRender(); });
+    zoom.appendChild(zr);
+    acoes.prepend(botao('Centralizar', 'Voltar o enquadramento ao centro', () => {
+      q.px = 0.5; q.py = 0.5; q.zoom = 1; zr.value = 1; agendarRender();
+    }));
+
+    corpo.append(area, zoom, acoes);
+    item.append(thumb, corpo);
+    listaEl.appendChild(item);
+  });
+}
+
+$('#btnLimpar').addEventListener('click', () => {
+  if (!confirm('Remover todos os quadros?')) return;
+  quadros.length = 0;
+  renderLista(); agendarRender();
+});
+
+/* ---------- Imagens soltas (upload, arrastar, colar) ---------- */
+async function arquivoParaCanvas(file) {
+  const bmp = await createImageBitmap(file);
+  const c = document.createElement('canvas');
+  c.width = bmp.width; c.height = bmp.height;
+  c.getContext('2d').drawImage(bmp, 0, 0);
+  if (bmp.close) bmp.close();
+  return c;
+}
+
+async function prepararImagem(file) {
+  let c = await arquivoParaCanvas(file);
+  if ($('#cortarBarras').checked) c = cortarBordasPretas(c);
+  return c;
+}
+
+async function adicionarArquivos(files) {
+  const imagens = files.filter(f => f.type.startsWith('image/'));
+  if (!imagens.length) { if (files.length) toast('Só dá para adicionar imagens.'); return; }
+  // ordena pelo nome (print1, print2, print10…) para manter a sequência
+  imagens.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { numeric: true }));
+  for (const f of imagens) {
+    try { adicionarQuadro(await prepararImagem(f)); }
+    catch (e) { toast(`Não consegui abrir "${f.name}".`); }
+  }
+}
+
+function trocarImagem(q) {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = 'image/*';
+  inp.addEventListener('change', async () => {
+    const f = inp.files[0]; if (!f) return;
+    try {
+      q.fonte = await prepararImagem(f);
+      q.px = 0.5; q.py = 0.5; q.zoom = 1;
+      q.thumb = miniatura(q.fonte);
+      renderLista(); agendarRender();
+    } catch (e) { toast(`Não consegui abrir "${f.name}".`); }
+  });
+  inp.click();
+}
+
+$('#addImagens').addEventListener('change', (e) => { adicionarArquivos([...e.target.files]); e.target.value = ''; });
+
+const zonaDrop = $('#zonaDrop');
+['dragenter', 'dragover'].forEach(ev => document.addEventListener(ev, (e) => {
+  if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { e.preventDefault(); zonaDrop.classList.add('arrastando'); }
+}));
+['dragleave', 'drop'].forEach(ev => document.addEventListener(ev, (e) => {
+  if (ev === 'dragleave' && e.relatedTarget) return;
+  zonaDrop.classList.remove('arrastando');
+}));
+document.addEventListener('drop', (e) => {
+  if (!e.dataTransfer || !e.dataTransfer.files.length) return;
+  e.preventDefault();
+  adicionarArquivos([...e.dataTransfer.files]);
+});
+
+document.addEventListener('paste', (e) => {
+  const itens = [...(e.clipboardData?.items || [])];
+  const imagens = itens.filter(i => i.type.startsWith('image/')).map(i => i.getAsFile()).filter(Boolean);
+  if (imagens.length) { e.preventDefault(); adicionarArquivos(imagens); return; }
+});
+
+/* ---------- Enquadramento: arrastar e dar zoom direto na prévia ---------- */
+function pontoNoCanvas(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: (e.clientX - r.left) * canvas.width / r.width, y: (e.clientY - r.top) * canvas.height / r.height };
+}
+function quadroNoPonto(p) {
+  return layoutAtual.find(l => p.x >= l.x && p.x <= l.x + l.w && p.y >= l.y && p.y <= l.y + l.h);
+}
+function sincronizarZoom(q) {
+  const el = listaEl.querySelector(`input[data-zoom-id="${q.id}"]`);
+  if (el) el.value = q.zoom;
+}
+
+let arrasto = null;
+canvas.addEventListener('pointerdown', (e) => {
+  const p = pontoNoCanvas(e);
+  const l = quadroNoPonto(p);
+  if (!l) return;
+  e.preventDefault();
+  canvas.setPointerCapture(e.pointerId);
+  canvas.classList.add('arrastando');
+  arrasto = { l, inicio: p, px: l.q.px, py: l.q.py };
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (!arrasto) return;
+  const p = pontoNoCanvas(e);
+  const { l } = arrasto;
+  const R = proporcaoAtual();
+  const c = calcularCorte(l.q, R);
+  // converte o deslocamento na prévia para pixels da foto original
+  const escala = c.sw / l.w;
+  const folgaX = c.iw - c.sw, folgaY = c.ih - c.sh;
+  const lim = (v) => Math.min(1, Math.max(0, v));
+  if (folgaX > 0) l.q.px = lim(arrasto.px - (p.x - arrasto.inicio.x) * escala / folgaX);
+  if (folgaY > 0) l.q.py = lim(arrasto.py - (p.y - arrasto.inicio.y) * escala / folgaY);
+  agendarRender();
+});
+const fimArrasto = () => { arrasto = null; canvas.classList.remove('arrastando'); };
+canvas.addEventListener('pointerup', fimArrasto);
+canvas.addEventListener('pointercancel', fimArrasto);
+
+canvas.addEventListener('wheel', (e) => {
+  const l = quadroNoPonto(pontoNoCanvas(e));
+  if (!l) return;
+  e.preventDefault();
+  l.q.zoom = Math.min(3, Math.max(1, l.q.zoom * (e.deltaY < 0 ? 1.08 : 1 / 1.08)));
+  sincronizarZoom(l.q);
+  agendarRender();
+}, { passive: false });
+
+canvas.addEventListener('dblclick', (e) => {
+  const l = quadroNoPonto(pontoNoCanvas(e));
+  if (!l) return;
+  l.q.px = 0.5; l.q.py = 0.5; l.q.zoom = 1;
+  sincronizarZoom(l.q);
+  agendarRender();
+});
+
+function cortarBordasPretas(c) {
+  const w = c.width, h = c.height;
+  const d = c.getContext('2d').getImageData(0, 0, w, h).data;
+  const LIM = 26;
+  const escuro = (x, y) => { const i = (y * w + x) * 4; return d[i] <= LIM && d[i + 1] <= LIM && d[i + 2] <= LIM; };
+  const linhaEscura = (y) => { for (let x = 0; x < w; x += 2) if (!escuro(x, y)) return false; return true; };
+
+  let topo = 0; while (topo < h - 1 && linhaEscura(topo)) topo++;
+  let base = h - 1; while (base > topo && linhaEscura(base)) base--;
+  const colunaEscura = (x) => { for (let y = topo; y <= base; y += 2) if (!escuro(x, y)) return false; return true; };
+  let esq = 0; while (esq < w - 1 && colunaEscura(esq)) esq++;
+  let dir = w - 1; while (dir > esq && colunaEscura(dir)) dir--;
+
+  const nw = dir - esq + 1, nh = base - topo + 1;
+  if (nw === w && nh === h) return c;
+  if (nw < w * 0.2 || nh < h * 0.2) return c; // frame quase todo preto: não mexe
+  const n = document.createElement('canvas');
+  n.width = nw; n.height = nh;
+  n.getContext('2d').drawImage(c, esq, topo, nw, nh, 0, 0, nw, nh);
+  return n;
+}
+
+/* =========================================================
+   Controles de estilo
+   ========================================================= */
+const CONTROLES = {
+  cor: 'corLegenda', fonte: 'fonteLegenda', tamanho: 'tamanhoLegenda', contorno: 'contornoLegenda',
+  margem: 'margemLegenda', maiusculas: 'maiusculas', sombra: 'sombra',
+  proporcao: 'proporcao', formato: 'formato', espaco: 'espaco', corEspaco: 'corEspaco'
+};
+const SUFIXOS = { tamanhoLegenda: '%', contornoLegenda: '%', margemLegenda: '%', espaco: '' };
+
+function aplicarControles() {
+  for (const [k, id] of Object.entries(CONTROLES)) {
+    const el = document.getElementById(id);
+    if (el.type === 'checkbox') el.checked = !!estilo[k];
+    else el.value = estilo[k];
+  }
+  atualizarRotulos();
+}
+
+function atualizarRotulos() {
+  document.querySelectorAll('[data-de]').forEach(b => {
+    const id = b.dataset.de;
+    b.textContent = document.getElementById(id).value + (SUFIXOS[id] || '');
+  });
+  document.querySelectorAll('.amostra').forEach(a =>
+    a.classList.toggle('ativa', a.dataset.cor.toLowerCase() === estilo.cor.toLowerCase()));
+}
+
+function lerControles() {
+  for (const [k, id] of Object.entries(CONTROLES)) {
+    const el = document.getElementById(id);
+    estilo[k] = el.type === 'checkbox' ? el.checked : el.type === 'range' ? +el.value : el.value;
+  }
+  atualizarRotulos();
+  try { localStorage.setItem('quadroaquadro.estilo', JSON.stringify(estilo)); } catch (e) {}
+  agendarRender();
+}
+
+Object.values(CONTROLES).forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input', lerControles);
+});
+document.querySelectorAll('.amostra').forEach(a => a.addEventListener('click', () => {
+  $('#corLegenda').value = a.dataset.cor;
+  lerControles();
+}));
+
+/* =========================================================
+   Exportar
+   ========================================================= */
+function nomeArquivo() {
+  const d = new Date(), p = (n) => String(n).padStart(2, '0');
+  return `quadro-a-quadro-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}.png`;
+}
+
+function gerarBlob() {
+  render();
+  return new Promise(r => canvas.toBlob(r, 'image/png'));
+}
+
+$('#btnBaixar').addEventListener('click', async () => {
+  if (!quadros.length) { toast('Adicione pelo menos um quadro.'); return; }
+  const blob = await gerarBlob();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = nomeArquivo();
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+});
+
+$('#btnCopiar').addEventListener('click', async () => {
+  if (!quadros.length) { toast('Adicione pelo menos um quadro.'); return; }
+  try {
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': gerarBlob() })]);
+    toast('Imagem copiada! É só colar no WhatsApp, Discord, etc.');
+  } catch (e) {
+    toast('O navegador não deixou copiar. Use "Baixar PNG".');
+  }
+});
+
+/* =========================================================
+   Início
+   ========================================================= */
+aplicarControles();
+renderLista();
+render();
+</script>
+</body>
+</html>
